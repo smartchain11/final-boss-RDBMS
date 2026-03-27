@@ -1,0 +1,37 @@
+<?php
+namespace App\Controllers;
+use CodeIgniter\RESTful\ResourceController;
+use Firebase\JWT\JWT;
+
+class AuthController extends ResourceController {
+    public function register() {
+        $db = \Config\Database::connect();
+        $json = $this->request->getJSON();
+        $data = [
+            'username' => $json->username,
+            'password_hash' => $json->password,
+            'role' => 'instructor'
+        ];
+        $db->table('users')->insert($data);
+        return $this->respondCreated(['message' => 'User registered']);
+    }
+
+    public function login() {
+        $db = \Config\Database::connect();
+        $json = $this->request->getJSON();
+        $user = $db->table('users')->where('username', $json->username)->get()->getRowArray();
+
+        if (!$user || $json->password !== $user['password_hash']) {
+            return $this->failUnauthorized('Invalid login');
+        }
+
+        $token = JWT::encode([
+            "iat" => time(),
+            "exp" => time() + 3600,
+            "uid" => $user['id'],
+            "role" => $user['role']
+        ], getenv('JWT_SECRET'), 'HS256');
+
+        return $this->respond(['token' => $token, 'role' => $user['role']]);
+    }
+}

@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class CourseModel extends Model
+{
+    protected $table            = 'courses';
+    protected $primaryKey       = 'course_id';
+    protected $useAutoIncrement = true;
+    protected $returnType       = 'array';
+    protected $useSoftDeletes   = false;
+    protected $protectFields    = true;
+    protected $allowedFields    = ['title', 'description', 'dept_id', 'uploader_id'];
+
+    protected bool $allowEmptyInserts = false;
+
+    protected $useTimestamps = false; 
+}

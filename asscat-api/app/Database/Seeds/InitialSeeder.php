@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Database\Seeds;
+
+use CodeIgniter\Database\Seeder;
+
+class InitialSeeder extends Seeder
+{
+    public function run()
+    {
+        $db = \Config\Database::connect();
+
+        $db->table('departments')->ignore(true)->insert([
+            'dept_id'   => 1,
+            'dept_name' => 'General Education'
+        ]);
+
+        $db->table('courses')->ignore(true)->insert([
+            'course_id'   => 1,
+            'title'       => 'General Mathematics',
+            'description' => 'Foundation for mathematics',
+            'dept_id'     => 1,
+            'uploader_id' => 6
+        ]);
+
+        $categories = [
+            [1, 'Mathematics'],
+            [2, 'Science'],
+            [3, 'Technology'],
+            [4, 'Engineering'],
+            [5, 'Arts & Humanities'],
+            [6, 'Business & Management'],
+            [7, 'Health Sciences'],
+            [8, 'Social Sciences']
+        ];
+
+        foreach ($categories as $cat) {
+            $db->table('course_sections')->ignore(true)->insert([
+                'section_id'   => $cat[0],
+                'course_id'    => 1,
+                'section_name' => $cat[1],
+                'sort_order'   => $cat[0]
+            ]);
+        }
+    }
+}

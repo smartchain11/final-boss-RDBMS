@@ -1,0 +1,111 @@
+CRITICAL - 2026-03-22 08:12:19 --> ErrorException: Undefined array key "uploader_id"
+[Method: DELETE, Route: upload/delete/6]
+in APPPATH\Controllers\Upload.php on line 109.
+ 1 APPPATH\Controllers\Upload.php(109): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "uploader_id"', 'C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\app\\Controllers\\Upload.php', 109)
+ 2 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 3 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 4 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:12:22 --> ErrorException: Undefined array key "uploader_id"
+[Method: DELETE, Route: upload/delete/6]
+in APPPATH\Controllers\Upload.php on line 109.
+ 1 APPPATH\Controllers\Upload.php(109): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "uploader_id"', 'C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\app\\Controllers\\Upload.php', 109)
+ 2 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 3 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 4 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:12:25 --> ErrorException: Undefined array key "uploader_id"
+[Method: DELETE, Route: upload/delete/8]
+in APPPATH\Controllers\Upload.php on line 109.
+ 1 APPPATH\Controllers\Upload.php(109): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "uploader_id"', 'C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\app\\Controllers\\Upload.php', 109)
+ 2 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 3 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 4 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:14:24 --> CodeIgniter\Database\Exceptions\DatabaseException: Deletes are not allowed unless they contain a "where" or "like" clause.
+[Method: DELETE, Route: upload/delete/6]
+in SYSTEMPATH\Database\BaseBuilder.php on line 1988.
+ 1 SYSTEMPATH\Model.php(321): CodeIgniter\Database\BaseBuilder->delete()
+ 2 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doDelete(null, false)
+ 3 APPPATH\Controllers\Upload.php(115): CodeIgniter\BaseModel->delete(null)
+ 4 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 5 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 6 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:14:36 --> CodeIgniter\Database\Exceptions\DatabaseException: Deletes are not allowed unless they contain a "where" or "like" clause.
+[Method: DELETE, Route: upload/delete/6]
+in SYSTEMPATH\Database\BaseBuilder.php on line 1988.
+ 1 SYSTEMPATH\Model.php(321): CodeIgniter\Database\BaseBuilder->delete()
+ 2 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doDelete(null, false)
+ 3 APPPATH\Controllers\Upload.php(115): CodeIgniter\BaseModel->delete(null)
+ 4 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 5 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 6 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:14:45 --> CodeIgniter\Database\Exceptions\DatabaseException: Deletes are not allowed unless they contain a "where" or "like" clause.
+[Method: DELETE, Route: upload/delete/8]
+in SYSTEMPATH\Database\BaseBuilder.php on line 1988.
+ 1 SYSTEMPATH\Model.php(321): CodeIgniter\Database\BaseBuilder->delete()
+ 2 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doDelete(null, false)
+ 3 APPPATH\Controllers\Upload.php(115): CodeIgniter\BaseModel->delete(null)
+ 4 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 5 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 6 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:15:27 --> CodeIgniter\Database\Exceptions\DatabaseException: Deletes are not allowed unless they contain a "where" or "like" clause.
+[Method: DELETE, Route: upload/delete/6]
+in SYSTEMPATH\Database\BaseBuilder.php on line 1988.
+ 1 SYSTEMPATH\Model.php(321): CodeIgniter\Database\BaseBuilder->delete()
+ 2 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doDelete(null, false)
+ 3 APPPATH\Controllers\Upload.php(115): CodeIgniter\BaseModel->delete(null)
+ 4 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 5 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 6 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:16:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Deletes are not allowed unless they contain a "where" or "like" clause.
+[Method: DELETE, Route: upload/delete/6]
+in SYSTEMPATH\Database\BaseBuilder.php on line 1988.
+ 1 SYSTEMPATH\Model.php(321): CodeIgniter\Database\BaseBuilder->delete()
+ 2 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doDelete(null, false)
+ 3 APPPATH\Controllers\Upload.php(115): CodeIgniter\BaseModel->delete(null)
+ 4 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 5 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 6 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
+CRITICAL - 2026-03-22 08:16:29 --> CodeIgniter\Database\Exceptions\DatabaseException: Deletes are not allowed unless they contain a "where" or "like" clause.
+[Method: DELETE, Route: upload/delete/8]
+in SYSTEMPATH\Database\BaseBuilder.php on line 1988.
+ 1 SYSTEMPATH\Model.php(321): CodeIgniter\Database\BaseBuilder->delete()
+ 2 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doDelete(null, false)
+ 3 APPPATH\Controllers\Upload.php(115): CodeIgniter\BaseModel->delete(null)
+ 4 SYSTEMPATH\CodeIgniter.php(642): App\Controllers\Upload->deleteMyResource()
+ 5 SYSTEMPATH\CodeIgniter.php(351): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
+ 6 SYSTEMPATH\CodeIgniter.php(224): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(344): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(49): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(38): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(23): require_once('C:\\Users\\Necry Talkie\\Documents\\asscat-project\\asscat-api\\public\\index.php')
