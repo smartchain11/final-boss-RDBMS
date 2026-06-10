@@ -8,8 +8,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install mysqli pdo pdo_mysql zip intl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && { a2dismod -f mpm_event mpm_worker 2>/dev/null || true; } \
-    && a2enmod rewrite mpm_prefork
+    && a2dismod -f mpm_event 2>/dev/null || true \
+    && a2dismod -f mpm_worker 2>/dev/null || true \
+    && a2enmod rewrite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
