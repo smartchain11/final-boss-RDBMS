@@ -1,3 +1,2 @@
 <?php
-
-include __DIR__ . '/error_exception.php';
+ include __DIR__ . '/error_exception.php'; 

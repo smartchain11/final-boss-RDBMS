@@ -1,22 +1,2 @@
 <?php
-
-namespace Config;
-
-
-class WorkerMode
-{
-    
-    public array $persistentServices = [
-        'autoloader',
-        'locator',
-        'exceptions',
-        'commands',
-        'codeigniter',
-        'superglobals',
-        'routes',
-        'cache',
-    ];
-
-    
-    public bool $forceGarbageCollection = true;
-}
+ namespace Config; class WorkerMode { public array $persistentServices = [ 'autoloader', 'locator', 'exceptions', 'commands', 'codeigniter', 'superglobals', 'routes', 'cache', ]; public bool $forceGarbageCollection = true; } 

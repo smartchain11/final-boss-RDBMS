@@ -62,7 +62,7 @@ function App() {
             try {
                 const res = await axios.get(`${API_URL}/user/profile`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const p = res.data;
-                // Sync profile data to localStorage for other components
+
                 localStorage.setItem('user_name', p.name);
                 localStorage.setItem('role', p.role);
                 localStorage.setItem('subscription_tier', p.subscription_tier);
