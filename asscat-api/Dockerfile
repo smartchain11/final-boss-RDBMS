@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y \
         zip \
         unzip \
     && docker-php-ext-install mysqli pdo pdo_mysql zip intl \
-    && a2dismod mpm_event mpm_worker \
-    && a2enmod rewrite \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,11 +19,11 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN chmod -R 777 writable/
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+RUN a2dismod -f mpm_event mpm_worker \
+    && a2enmod rewrite \
+    && sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
+    && sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
+    && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 EXPOSE 80
 
