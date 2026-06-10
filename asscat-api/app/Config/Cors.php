@@ -10,7 +10,7 @@ class Cors extends BaseConfig
     
     public array $default = [
         
-        'allowedOrigins' => ['http://localhost:3000'],
+        'allowedOrigins' => array_filter(array_map('trim', explode(',', getenv('cors.allowedOrigins') ?: 'http://localhost:3000'))),
 
         
         'allowedOriginsPatterns' => [],

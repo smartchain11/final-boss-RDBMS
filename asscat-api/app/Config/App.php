@@ -7,7 +7,7 @@ use CodeIgniter\Config\BaseConfig;
 class App extends BaseConfig
 {
     
-    public string $baseURL = 'http://localhost:8080/';
+    public string $baseURL = getenv('app.baseURL') ?: 'http://localhost:8080/';
 
     
     public array $allowedHostnames = [];
