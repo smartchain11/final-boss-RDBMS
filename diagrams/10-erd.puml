@@ -1,0 +1,188 @@
+@startuml
+!include 00-skin.iuml
+
+skinparam entityBorderColor black
+skinparam entityBackgroundColor white
+skinparam relationshipBackgroundColor white
+
+' Hide the circle on relationships
+hide circle
+
+entity "users" as USERS {
+  user_id: INT (PK)
+  name: VARCHAR
+  email: VARCHAR (UQ)
+  password_hash: VARCHAR
+  email_verified: TINYINT
+  role: ENUM
+  account_type: ENUM
+  education_level: ENUM
+  promo_discount: DECIMAL
+  subscription_tier: ENUM
+  payout_pin: VARCHAR
+  created_at: TIMESTAMP
+}
+
+entity "user_details" as UD {
+  user_id: INT (PK,FK)
+  bio: TEXT
+  profile_image: VARCHAR
+  specialization: VARCHAR
+}
+
+entity "resources" as RES {
+  resource_id: INT (PK)
+  section_id: INT (FK)
+  dept_id: INT (FK)
+  uploader_id: INT (FK)
+  title: VARCHAR
+  price: DECIMAL
+  file_path: VARCHAR
+  file_type: VARCHAR
+  material_type: ENUM
+  is_approved: TINYINT
+  created_at: TIMESTAMP
+}
+
+entity "departments" as DEP {
+  dept_id: INT (PK)
+  dept_name: VARCHAR
+  description: TEXT
+}
+
+entity "courses" as CRS {
+  course_id: INT (PK)
+  title: VARCHAR
+  dept_id: INT (FK)
+}
+
+entity "course_sections" as CS {
+  section_id: INT (PK)
+  course_id: INT (FK)
+  section_name: VARCHAR
+  sort_order: INT
+}
+
+entity "resource_purchases" as RP {
+  purchase_id: INT (PK)
+  user_id: INT (FK)
+  resource_id: INT (FK)
+  listed_price: DECIMAL
+  discount_percent: DECIMAL
+  paid_amount: DECIMAL
+  uploader_amount: DECIMAL
+  owner_amount: DECIMAL
+  status: ENUM
+  purchased_at: TIMESTAMP
+}
+
+entity "resource_access_logs" as RAL {
+  access_id: INT (PK)
+  user_id: INT (FK)
+  resource_id: INT (FK)
+  opened_at: TIMESTAMP
+}
+
+entity "user_transactions" as UT {
+  transaction_id: INT (PK)
+  user_id: INT (FK)
+  resource_id: INT (FK)
+  transaction_type: ENUM
+  amount: DECIMAL
+  uploader_amount: DECIMAL
+  owner_amount: DECIMAL
+  created_at: TIMESTAMP
+}
+
+entity "withdrawals" as WTH {
+  withdrawal_id: INT (PK)
+  user_id: INT (FK)
+  amount: DECIMAL
+  method: ENUM
+  account_number: VARCHAR
+  status: ENUM
+  created_at: TIMESTAMP
+}
+
+entity "notifications" as NOTIF {
+  notif_id: INT (PK)
+  user_id: INT (FK)
+  title: VARCHAR
+  message: TEXT
+  is_read: TINYINT
+  created_at: TIMESTAMP
+}
+
+entity "verification_codes" as VC {
+  code_id: INT (PK)
+  email: VARCHAR
+  code: VARCHAR
+  type: ENUM
+  used: TINYINT
+  attempts: TINYINT
+  expires_at: DATETIME
+  created_at: TIMESTAMP
+}
+
+entity "user_sessions" as SES {
+  session_id: INT (PK)
+  user_id: INT (FK)
+  ip_address: VARCHAR
+  device_name: VARCHAR
+  location: VARCHAR
+  is_trusted: TINYINT
+  last_login_at: TIMESTAMP
+}
+
+entity "payout_accounts" as PA {
+  account_id: INT (PK)
+  user_id: INT (FK)
+  account_type: ENUM
+  account_number: VARCHAR
+  account_name: VARCHAR
+  card_number: VARCHAR
+  expiry_date: VARCHAR
+}
+
+entity "login_attempts" as LA {
+  attempt_id: INT (PK)
+  email: VARCHAR
+  ip_address: VARCHAR
+  attempts: INT
+  locked_until: DATETIME
+}
+
+entity "tags" as TAGS {
+  tag_id: INT (PK)
+  tag_name: VARCHAR (UQ)
+}
+
+entity "resource_tags" as RT {
+  resource_id: INT (PK,FK)
+  tag_id: INT (PK,FK)
+}
+
+' === Relationships ===
+USERS ||--o| UD : "has"
+USERS ||--o{ RES : "uploads"
+USERS ||--o{ RP : "makes"
+USERS ||--o{ RAL : "accesses"
+USERS ||--o{ UT : "has"
+USERS ||--o{ WTH : "requests"
+USERS ||--o{ NOTIF : "receives"
+USERS ||--o{ SES : "logs"
+USERS ||--o{ PA : "owns"
+
+DEP ||--o{ CRS : "contains"
+CRS ||--o{ CS : "has"
+CS ||--o{ RES : "organizes"
+
+RES ||--o{ RP : "sold as"
+RES ||--o{ RAL : "accessed"
+RES ||--o{ UT : "referenced"
+
+RES }o--|| TAGS : "tagged via"
+RES ||--o{ RT : ""
+TAGS ||--o{ RT : ""
+
+@enduml

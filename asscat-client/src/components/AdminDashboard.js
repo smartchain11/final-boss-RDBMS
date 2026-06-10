@@ -9,7 +9,7 @@ function AdminDashboard() {
 
     const fetchPendingResources = async () => {
         const token = authService.getToken();
-        const response = await fetch(`${API_URL}/admin/resources/pending`, {
+        const response = await fetch(`${API_URL}/admin/books/pending`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();
@@ -22,13 +22,13 @@ function AdminDashboard() {
 
     const handleApprove = async (resourceId) => {
         const token = authService.getToken();
-        const response = await fetch(`${API_URL}/admin/resource/approve/${resourceId}`, {
+        const response = await fetch(`${API_URL}/admin/book/approve/${resourceId}`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (response.ok) {
-            setMessage('Resource approved successfully!');
+            setMessage('Book approved successfully!');
             fetchPendingResources();
         } else {
             const errorData = await response.json();
@@ -38,7 +38,7 @@ function AdminDashboard() {
 
     return (
         <div>
-            <h2>Admin Dashboard: Pending Approvals</h2>
+            <h2>Admin Dashboard: Pending Book Approvals</h2>
             {message && <p>{message}</p>}
             <ul>
                 {pendingResources.map(resource => (

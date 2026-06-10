@@ -1,0 +1,33 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Uploader" as U
+participant "ResourceDetail" as RD
+participant "CourseController" as CC
+participant "Database" as DB
+
+U -> RD: Click Open on own material
+RD -> CC: POST /resource/:id/open
+CC -> DB: SELECT resource WHERE resource_id=?
+DB --> CC: resource (uploader_id=X)
+CC -> CC: Check JWT user_id == uploader_id
+note right: Match found - bypass checks
+alt is uploader's own material
+  CC -[#black]> CC: Skip purchase check
+  CC -[#black]> CC: Skip open limit check
+  CC -[#black]> CC: Skip revenue recording
+  CC --> RD: 200 Access granted
+  RD -> U: Display resource
+else not owner
+  CC -> DB: Check resource_purchases
+  DB --> CC: purchase record
+  alt purchased
+    CC -> DB: INSERT INTO resource_access_logs
+    CC --> RD: 200 Access granted
+    RD -> U: Display resource
+  else not purchased
+    CC --> RD: 403 Access denied
+  end
+end
+@enduml

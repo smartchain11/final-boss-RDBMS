@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\phpunit.xml.dist" tests="5" assertions="4" errors="2" failures="0" skipped="0" time="0.084586">
+    <testsuite name="App" tests="5" assertions="4" errors="2" failures="0" skipped="0" time="0.084586">
+      <testsuite name="ExampleDatabaseTest" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\database\ExampleDatabaseTest.php" tests="2" assertions="0" errors="2" failures="0" skipped="0" time="0.000000">
+        <testcase name="testModelFindAll" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\database\ExampleDatabaseTest.php" line="15" class="ExampleDatabaseTest" classname="ExampleDatabaseTest" assertions="0" time="0.000000">
+          <error type="CodeIgniter\Exceptions\CriticalError">ExampleDatabaseTest::testModelFindAll&#13;
+CodeIgniter\Exceptions\CriticalError: The required PHP extension "sqlite3" is not loaded. Install and enable it to use "SQLite3" driver.
+&#13;
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Database\Database.php:135
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Database\Database.php:34
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Database\Config.php:54
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Test\DatabaseTestTrait.php:47
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Test\DatabaseTestTrait.php:32
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Test\CIUnitTestCase.php:131</error>
+        </testcase>
+        <testcase name="testSoftDeleteLeavesRow" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\database\ExampleDatabaseTest.php" line="24" class="ExampleDatabaseTest" classname="ExampleDatabaseTest" assertions="0" time="0.000000">
+          <error type="CodeIgniter\Exceptions\CriticalError">ExampleDatabaseTest::testSoftDeleteLeavesRow&#13;
+CodeIgniter\Exceptions\CriticalError: The required PHP extension "sqlite3" is not loaded. Install and enable it to use "SQLite3" driver.
+&#13;
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Database\Database.php:135
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Database\Database.php:34
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Database\Config.php:54
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Test\DatabaseTestTrait.php:47
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Test\DatabaseTestTrait.php:32
+C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\system\Test\CIUnitTestCase.php:131</error>
+        </testcase>
+      </testsuite>
+      <testsuite name="ExampleSessionTest" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\session\ExampleSessionTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.008257">
+        <testcase name="testSessionSimple" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\session\ExampleSessionTest.php" line="8" class="ExampleSessionTest" classname="ExampleSessionTest" assertions="1" time="0.008257"/>
+      </testsuite>
+      <testsuite name="HealthTest" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\unit\HealthTest.php" tests="2" assertions="3" errors="0" failures="0" skipped="0" time="0.076329">
+        <testcase name="testIsDefinedAppPath" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\unit\HealthTest.php" line="10" class="HealthTest" classname="HealthTest" assertions="1" time="0.004705"/>
+        <testcase name="testBaseUrlHasBeenSet" file="C:\Users\Necry Talkie\Documents\asscat-project\asscat-api\tests\unit\HealthTest.php" line="15" class="HealthTest" classname="HealthTest" assertions="2" time="0.071624"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

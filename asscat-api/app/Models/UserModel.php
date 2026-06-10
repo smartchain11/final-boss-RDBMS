@@ -10,15 +10,26 @@ class UserModel extends Model {
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
 
-    protected $allowedFields = [
-        'name', 
-        'email', 
-        'password', // Allow password to be set, it will be hashed by the callback
-        'password_hash',
-        'role'
-    ];
+     protected $allowedFields = [
+         'name', 
+         'email', 
+         'password', // Allow password to be set, it will be hashed by the callback
+         'password_hash',
+         'role',
+         'account_type',
+         'education_level',
+         'promo_discount',
+         'proof_file_path',
+         'subscription_tier',
+         'subscription_expires_at',
+         'profile_image_path',
+         'is_blocked',
+         'verification_status',
+         'verification_attempts'
+     ];
 
     protected $beforeInsert = ['hashPassword'];
+    protected $beforeUpdate = ['hashPassword'];
 
     protected $validationRules = [
         'email'         => 'required|valid_email|is_unique[users.email]',

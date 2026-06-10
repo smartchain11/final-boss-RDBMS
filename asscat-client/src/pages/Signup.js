@@ -15,7 +15,7 @@ function Signup() {
 
     return (
         <div>
-            <h2>ASSCAT OER - Sign Up</h2>
+            <h2>NECRY OER - Sign Up</h2>
             <form onSubmit={handleSignup}>
                 <input placeholder="Username" onChange={e => setUser({...user, username: e.target.value})} /><br/>
                 <input type="password" placeholder="Password" onChange={e => setUser({...user, password: e.target.value})} /><br/>

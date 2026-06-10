@@ -1,0 +1,32 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Student" as S
+participant "ResourceDetail" as RD
+participant "CourseController" as CC
+participant "Database" as DB
+participant "EmailService" as ES
+
+S -> RD: View resource detail
+RD -> CC: GET /resource/:id
+CC -> DB: SELECT resource + user profile
+DB --> CC: resource, user data
+CC -> CC: getBestDiscount(user)
+note right: MAX(promo_discount, subscription_discount)
+CC --> RD: 200 { resource, discount }
+RD -> S: Show price breakdown
+
+S -> RD: Click Purchase
+RD -> S: Select payment method
+S -> RD: Confirm payment
+RD -> CC: POST /resource/:id/purchase
+CC -> DB: INSERT INTO resource_purchases
+note right: listed_price, discount, paid_amount
+CC -> DB: INSERT INTO user_transactions
+note right: uploader 80%, owner 20%
+CC -> ES: sendReceiptEmail()
+ES --> S: Purchase receipt
+CC --> RD: 200 Purchase complete
+RD -> S: Success celebration
+@enduml

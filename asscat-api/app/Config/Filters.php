@@ -20,7 +20,7 @@ class Filters extends BaseConfig
     
     public array $globals = [
         'before' => [
-            'cors', // Gidugang nato ang CORS diri aron mo-run before sa tanan
+            'cors',
         ],
         'after' => [
             'toolbar',
@@ -36,7 +36,14 @@ class Filters extends BaseConfig
             'before' => [
                 'upload/*',
                 'admin/*',
-                'course/create', // Assuming this might be one
+                'user/*',
+                'auth/upgrade',
+                'user/sessions/*',
+                'resource/*/purchase',
+                'resource/*/open',
+                'book/*/purchase',
+                'book/*/open',
+                'transactions/*',
             ]
         ]
     ];

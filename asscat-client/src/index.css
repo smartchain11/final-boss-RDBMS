@@ -16,3 +16,34 @@ body {
     @apply bg-gray-50 text-gray-900;
   }
 }
+
+/* Print Styles for Professional Reports */
+@media print {
+  header, footer, .lg\:col-span-1, button, .no-print {
+    display: none !important;
+  }
+  
+  .lg\:col-span-3 {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .bg-white {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .rounded-\[50px\], .rounded-\[40px\], .rounded-\[35px\] {
+    border-radius: 0 !important;
+  }
+
+  /* Ensure text is black for printing */
+  h2, h3, h4, p, span, td, th {
+    color: black !important;
+  }
+}

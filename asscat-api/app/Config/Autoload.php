@@ -19,5 +19,5 @@ class Autoload extends AutoloadConfig
     public $files = [];
 
     
-    public $helpers = [];
+    public $helpers = ['device'];
 }

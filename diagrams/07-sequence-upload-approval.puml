@@ -1,0 +1,36 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Uploader" as UP
+actor "Admin" as AD
+participant "UploadForm" as UF
+participant "AdminDashboard" as ADB
+participant "UploadController" as UC
+participant "AdminController" as AC
+participant "Database" as DB
+participant "Notification" as NOTIF
+
+== Upload Phase ==
+UP -> UF: Fill resource metadata + file
+UF -> UC: POST /upload/resource (FormData)
+UC -> UC: Validate file type & size
+UC -> DB: INSERT INTO resources (is_approved=0)
+note right: Resource pending approval
+UC --> UF: 201 Resource created
+UF -> UP: Show success message
+
+== Approval Phase ==
+AD -> ADB: View pending resources
+ADB -> AC: GET /admin/resources/pending
+AC -> DB: SELECT * WHERE is_approved=0
+DB --> AC: list of pending resources
+AC --> ADB: Show pending list
+AD -> ADB: Click Approve
+ADB -> AC: POST /admin/resource/approve/:id
+AC -> DB: UPDATE resources SET is_approved=1
+AC -> DB: INSERT INTO notifications (uploader_id)
+NOTIF --> UP: Resource approved notification
+AC --> ADB: 200 Approved
+ADB -> AD: Remove from pending list
+@enduml

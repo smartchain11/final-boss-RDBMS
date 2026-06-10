@@ -1,0 +1,31 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "User" as U
+participant "React SPA" as SPA
+participant "AuthController" as AC
+participant "Database" as DB
+participant "JWT" as JWT
+
+U -> SPA: Enter email & password
+SPA -> AC: POST /auth/login
+AC -> DB: SELECT * FROM users WHERE email=?
+DB --> AC: user record
+alt email_verified = 0
+  AC --> SPA: 403 Email not verified
+else email_verified = 1
+  AC -> DB: SELECT * FROM login_attempts
+  DB --> AC: attempt count
+  alt attempts > max
+    AC --> SPA: 429 Account locked
+  else valid login
+    AC -> DB: INSERT INTO user_sessions
+    AC -> DB: RESET login_attempts
+    AC -> JWT: generate token
+    JWT --> AC: JWT string
+    AC --> SPA: 200 { token, profile }
+    SPA -> U: Redirect to Dashboard
+  end
+end
+@enduml

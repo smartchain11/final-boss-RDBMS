@@ -15,10 +15,22 @@ class ResourceModel extends Model
         'dept_id',
         'uploader_id',
         'title',
+        'book_author',
+        'isbn',
+        'edition',
+        'publisher',
+        'page_count',
+        'language_code',
         'description',
         'file_path',
         'file_type',
-        'is_approved'
+        'material_type',
+        'price',
+        'owner_share_percent',
+        'preview_percent',
+        'free_preview_pages',
+        'is_approved',
+        'cover_image_path'
     ];
 
     protected $useTimestamps = false; // We'll let MariaDB handle current_timestamp()

@@ -65,12 +65,12 @@ class AuthController extends BaseController
             return $this->failServerError('JWT_SECRET key is not configured.');
         }
 
-        $iat = time(); // issued at
-        $exp = $iat + 3600; // expiration time (1 hour)
+        $iat = time();
+        $exp = $iat + 3600;
 
         $payload = [
-            'iss'   => 'asscat-api', // Issuer
-            'aud'   => 'asscat-client', // Audience
+            'iss'   => 'asscat-api',
+            'aud'   => 'asscat-client',
             'iat'   => $iat,
             'exp'   => $exp,
             'uid'   => $user['user_id'],

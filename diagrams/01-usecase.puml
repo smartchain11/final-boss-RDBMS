@@ -1,0 +1,74 @@
+@startuml
+!include 00-skin.iuml
+
+skinparam packageBorderColor black
+skinparam packageBackgroundColor white
+skinparam useCaseBorderColor black
+skinparam useCaseBackgroundColor white
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+
+left to right direction
+
+actor "Guest User" as GU
+actor "Student" as ST
+actor "Uploader" as UP
+
+rectangle "Necry OER Portal" {
+  (User Registration) as UC1
+  (User Login) as UC2
+  (Forgot Password) as UC3
+  (Browse Catalog) as UC4
+  (Search Resources) as UC5
+  (View Resource Detail) as UC6
+  (Purchase Resource) as UC7
+  (Open Resource) as UC8
+  (Upgrade Subscription) as UC9
+  (Upload Resource) as UC10
+  (Manage Content) as UC11
+  (Track Earnings) as UC12
+  (Manage Payouts) as UC13
+  (Request Withdrawal) as UC14
+  (Approve Resources) as UC15
+  (Manage Users) as UC16
+  (Process Withdrawals) as UC17
+}
+
+actor "Administrator" as AD
+
+GU --> UC1
+GU --> UC4
+GU --> UC5
+GU --> UC6
+
+ST --> UC2
+ST --> UC3
+ST --> UC7
+ST --> UC8
+ST --> UC9
+ST --> UC4
+ST --> UC5
+ST --> UC6
+
+UP --> UC2
+UP --> UC3
+UP --> UC8
+UP --> UC10
+UP --> UC11
+UP --> UC12
+UP --> UC13
+UP --> UC14
+UP --> UC4
+UP --> UC5
+UP --> UC6
+
+AD --> UC2
+AD --> UC3
+AD --> UC15
+AD --> UC16
+AD --> UC17
+AD --> UC4
+AD --> UC5
+AD --> UC6
+
+@enduml

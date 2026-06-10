@@ -1,0 +1,19 @@
+!define GLOBAL_SKIN skinparam monochrome true
+              skinparam linetype ortho
+              skinparam defaultFontName Bookman Old Style
+              skinparam defaultFontSize 11
+              skinparam participantFontSize 11
+              skinparam actorFontSize 11
+              skinparam useCaseFontSize 11
+              skinparam noteFontSize 10
+              skinparam arrowFontSize 10
+              skinparam packageFontSize 11
+              skinparam packageFontStyle bold
+              skinparam componentFontSize 11
+              skinparam databaseFontSize 11
+              skinparam rectangleFontSize 11
+              skinparam nodeFontSize 11
+              skinparam interfaceFontSize 11
+
+              !define MONO_SKIN
+

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { authService } from '../services/authService';
 
 function Login() {
@@ -7,8 +7,6 @@ function Login() {
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
-
     const handleLogin = async (e) => {
         e.preventDefault();
         setErrorMsg('');
@@ -84,6 +82,12 @@ function Login() {
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="flex items-center justify-end">
+                        <Link to="/forgot-password" className="text-[10px] font-bold text-[#005587] hover:text-red-600 transition-colors uppercase tracking-wider">
+                            Forgot Password?
+                        </Link>
                     </div>
 
                     <button

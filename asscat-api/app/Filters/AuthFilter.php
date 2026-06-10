@@ -25,57 +25,63 @@ class AuthFilter implements FilterInterface
             $header = $header->getValue();
         }
 
-        if (!$header) {
+        if (!$header || empty($header)) {
+            log_message('error', '[AuthFilter] No header found. URI: ' . $request->getUri()->getPath());
             return Services::response()
-                ->setJSON(['error' => 'No authorization header provided.'])
+                ->setJSON(['error' => 'No authorization header provided.', 'debug_uri' => $request->getUri()->getPath()])
                 ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
         }
 
-        $parts = explode(' ', $header);
+        log_message('notice', '[AuthFilter] Header received: ' . substr($header, 0, 15) . '...');
+
+        $parts = explode(' ', trim($header));
         if (count($parts) < 2) {
-            return Services::response()
-                ->setJSON(['error' => 'Malformed authorization header.'])
-                ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
+            if (strlen($parts[0]) > 50) {
+                $token = $parts[0];
+            } else {
+                log_message('error', '[AuthFilter] Malformed header: ' . $header);
+                return Services::response()
+                    ->setJSON(['error' => 'Malformed authorization header.'])
+                    ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
+            }
+        } else {
+            $token = $parts[1];
         }
-        $token = $parts[1];
-        $key = env('JWT_SECRET');
 
+        $key = $_ENV['JWT_SECRET'] ?? getenv('JWT_SECRET') ?? null;
         if (!$key) {
-            log_message('error', 'JWT_SECRET environment variable is not set.');
+            log_message('error', '[AuthFilter] JWT_SECRET missing in environment');
             return Services::response()->setJSON(['error' => 'Server configuration error.'])->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        $key = trim($key, '"\' ');
+
         try {
             $decoded = JWT::decode($token, new Key($key, 'HS256'));
-
+            log_message('notice', '[AuthFilter] Token decoded successfully for UID: ' . $decoded->uid);
             $uri = $request->getUri()->getPath();
             
+            // Define strictly protected areas
+            $isAdminRoute = str_starts_with($uri, 'admin/');
+            $isUploadRoute = str_starts_with($uri, 'upload/');
             $isManagementRoute = str_contains($uri, 'admin/course') || str_contains($uri, 'admin/section');
-            
-            if (str_starts_with($uri, 'admin/') && !$isManagementRoute && $decoded->role !== 'admin') {
+
+            // Admin only routes
+            if ($isAdminRoute && !$isManagementRoute && $decoded->role !== 'admin') {
                 return Services::response()->setJSON(['error' => 'Admin role required.'])
                                            ->setStatusCode(ResponseInterface::HTTP_FORBIDDEN);
             }
 
-            if ($isManagementRoute && !in_array($decoded->role, ['uploader', 'admin'])) {
-                return Services::response()->setJSON(['error' => 'Uploader or Admin role required.'])
+            // Uploader/Admin routes
+            if (($isUploadRoute || $isManagementRoute) && !in_array($decoded->role, ['uploader', 'admin'])) {
+                return Services::response()->setJSON(['error' => 'Contribution privileges required.'])
                                            ->setStatusCode(ResponseInterface::HTTP_FORBIDDEN);
             }
 
-            if (str_starts_with($uri, 'upload/') && !in_array($decoded->role, ['uploader', 'admin'])) {
-                return Services::response()->setJSON(['error' => 'Uploader or Admin role required.'])
-                                           ->setStatusCode(ResponseInterface::HTTP_FORBIDDEN);
-            }
-
-            if (!empty($arguments)) {
-                $userRole = $decoded->role;
-                if (!in_array($userRole, $arguments, true)) {
-                    return Services::response()->setJSON(['error' => 'You do not have permission to perform this action.'])
-                                               ->setStatusCode(ResponseInterface::HTTP_FORBIDDEN);
-                }
-            }
+            // Other routes (history, upgrade, departments) are open to all authenticated roles (including student)
+            
         } catch (\Exception $e) {
-            return Services::response()->setJSON(['error' => 'Invalid token.', 'message' => $e->getMessage()])->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
+            return Services::response()->setJSON(['error' => 'Session expired or invalid.', 'details' => $e->getMessage()])->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
         }
     }
 

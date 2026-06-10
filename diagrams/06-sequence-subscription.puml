@@ -1,0 +1,28 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Student" as S
+participant "Dashboard" as D
+participant "SubscriptionController" as SC
+participant "Database" as DB
+participant "EmailService" as ES
+
+S -> D: Navigate to Subscription tab
+D -> S: Show current tier + upgrade options
+S -> D: Select Pro or Pro+ tier
+D -> S: Show payment method modal
+S -> D: Select payment method, confirm
+D -> SC: POST /auth/upgrade
+SC -> DB: SELECT user subscription_tier
+DB --> SC: current tier
+alt valid upgrade
+  SC -> DB: UPDATE users SET subscription_tier, subscription_expires_at
+  SC -> ES: sendUpgradeConfirmation()
+  ES --> S: Upgrade confirmation email
+  SC --> D: 200 Upgrade successful
+  D -> S: Show updated tier & benefits
+else invalid
+  SC --> D: 400 Upgrade failed
+end
+@enduml

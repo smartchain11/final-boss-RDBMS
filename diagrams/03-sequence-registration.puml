@@ -1,0 +1,32 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Guest" as G
+participant "SignUpPage" as SPA
+participant "RegisterController" as RC
+participant "Database" as DB
+participant "EmailService" as ES
+
+== Step 1: Send OTP ==
+G -> SPA: Fill registration form
+SPA -> RC: POST /auth/register/send-otp
+RC -> DB: INSERT INTO verification_codes
+note right: 6-digit code, 15-min expiry
+RC -> ES: sendOtpEmail(email, code)
+ES -> G: Email with OTP code
+
+== Step 2: Verify OTP & Create ==
+G -> SPA: Enter OTP code
+SPA -> RC: POST /auth/register
+RC -> DB: SELECT * FROM verification_codes
+DB --> RC: code record
+alt code valid & not expired
+  RC -> DB: INSERT INTO users
+  RC -> DB: UPDATE verification_codes SET used=1
+  RC --> SPA: 201 Account created
+  SPA -> G: Redirect to Login
+else invalid/expired
+  RC --> SPA: 400 Invalid or expired code
+end
+@enduml

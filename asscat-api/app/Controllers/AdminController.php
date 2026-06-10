@@ -4,27 +4,49 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\ResourceModel;
+use App\Libraries\FeatureSchema;
 
 class AdminController extends ResourceController
 {
     
+    private function createNotification($userId, $title, $message)
+    {
+        $notifModel = new \App\Models\NotificationModel();
+        $notifModel->insert([
+            'user_id' => $userId,
+            'title'   => $title,
+            'message' => $message
+        ]);
+    }
+
     public function approveResource($id = null)
     {
+        FeatureSchema::ensure();
+
         $resourceModel = new ResourceModel();
         $resource = $resourceModel->find($id);
 
-        if (!$resource) {
-            return $this->failNotFound('Resource not found.');
+        if (!$resource || ($resource['material_type'] ?? 'book') !== 'book') {
+            return $this->failNotFound('Book not found.');
         }
 
         $resourceModel->update($id, ['is_approved' => true]);
 
-        return $this->respond(['message' => 'Resource approved successfully.']);
+        // Notify Uploader
+        $this->createNotification(
+            $resource['uploader_id'], 
+            'Material Approved!', 
+            "Congratulations! Your book \"{$resource['title']}\" has been verified and is now live on the platform."
+        );
+
+        return $this->respond(['message' => 'Book approved successfully.']);
     }
 
   
     public function listPendingResources()
     {
+        FeatureSchema::ensure();
+
         $resourceModel = new ResourceModel();
         $resources = $resourceModel
             ->select('resources.*, users.name as uploader_name, course_sections.section_name, courses.title as course_title')
@@ -32,6 +54,7 @@ class AdminController extends ResourceController
             ->join('course_sections', 'course_sections.section_id = resources.section_id', 'left')
             ->join('courses', 'courses.course_id = course_sections.course_id', 'left')
             ->where('resources.is_approved', 0)
+            ->where('resources.material_type', 'book')
             ->findAll();
             
         return $this->respond($resources);
@@ -40,12 +63,23 @@ class AdminController extends ResourceController
   
     public function deleteResource($id = null)
     {
+        FeatureSchema::ensure();
+
         $resourceModel = new ResourceModel();
-        if (!$resourceModel->find($id)) {
-            return $this->failNotFound('Resource not found.');
+        $resource = $resourceModel->find($id);
+        if (!$resource || ($resource['material_type'] ?? 'book') !== 'book') {
+            return $this->failNotFound('Book not found.');
         }
+
+        // Notify Uploader before delete
+        $this->createNotification(
+            $resource['uploader_id'], 
+            'Material Rejected', 
+            "Unfortunately, your submission \"{$resource['title']}\" did not meet our quality standards and has been rejected."
+        );
+
         $resourceModel->delete($id);
-        return $this->respondDeleted(['message' => 'Resource deleted successfully.']);
+        return $this->respondDeleted(['message' => 'Book deleted successfully.']);
     }
 
     public function addSection()
@@ -102,8 +136,12 @@ class AdminController extends ResourceController
 
     public function listAllResources()
     {
+        FeatureSchema::ensure();
+
         $resourceModel = new ResourceModel();
-        return $this->respond($resourceModel->findAll());
+        return $this->respond(
+            $resourceModel->where('material_type', 'book')->findAll()
+        );
     }
 
 
@@ -187,5 +225,104 @@ class AdminController extends ResourceController
         }
         $deptModel->delete($id);
         return $this->respondDeleted(['message' => 'Subject deleted successfully']);
+    }
+
+    public function listUsers()
+    {
+        FeatureSchema::ensure();
+        $userModel = new \App\Models\UserModel();
+        $users = $userModel->select('user_id, name, email, role, account_type, education_level, is_blocked, created_at')->findAll();
+        return $this->respond($users);
+    }
+
+    public function toggleUserStatus($id = null)
+    {
+        FeatureSchema::ensure();
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find($id);
+        if (!$user) return $this->failNotFound('User not found');
+
+        $newStatus = (int)!((bool)$user['is_blocked']);
+        $userModel->update($id, ['is_blocked' => $newStatus]);
+
+        return $this->respond(['message' => $newStatus ? 'User blocked successfully' : 'User unblocked successfully', 'is_blocked' => $newStatus]);
+    }
+
+    public function resetUserPassword($id = null)
+    {
+        FeatureSchema::ensure();
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find($id);
+        if (!$user) return $this->failNotFound('User not found');
+
+        $newPassword = $this->request->getVar('password');
+        if (empty($newPassword)) {
+            return $this->fail('New password is required.', 400);
+        }
+
+        $userModel->update($id, ['password' => $newPassword]);
+
+        return $this->respond(['message' => 'Password updated successfully.']);
+    }
+
+    public function listUnverifiedUsers()
+    {
+        FeatureSchema::ensure();
+        $userModel = new \App\Models\UserModel();
+        // 0 = pending verification
+        $users = $userModel->where('verification_status', 0)->findAll();
+        return $this->respond($users);
+    }
+
+    public function verifyUser($id = null)
+    {
+        FeatureSchema::ensure();
+        $db = \Config\Database::connect();
+        $user = $db->table('users')->where('user_id', $id)->get()->getRowArray();
+        if (!$user) return $this->failNotFound('User not found');
+
+        // Calculate and restore promo discount upon verification
+        $promoDiscount = 0.0;
+        if (($user['account_type'] ?? '') === 'student') {
+            // Restore original discount based on level
+            $promoDiscount = ($user['education_level'] ?? '') === 'tertiary' ? 20.0 : 15.0;
+        }
+
+        $db->table('users')->where('user_id', $id)->update([
+            'verification_status' => 1,
+            'promo_discount' => $promoDiscount
+        ]);
+
+        // Notify Student
+        $this->createNotification(
+            $id, 
+            'ID Verification Successful!', 
+            "Your student identity has been verified. You are now eligible for exclusive discounts and full platform access."
+        );
+
+        return $this->respond(['message' => 'User identity verified successfully.']);
+    }
+
+    public function deleteUser($id = null)
+    {
+        FeatureSchema::ensure();
+        $userModel = new \App\Models\UserModel();
+        if (!$userModel->find($id)) return $this->failNotFound('User not found');
+
+        // Instead of deleting, we set status to 2 (Rejected) 
+        // and strip them of promo eligibility as requested
+        $userModel->update($id, [
+            'verification_status' => 2,
+            'promo_discount' => 0.0
+        ]);
+
+        // Notify Student
+        $this->createNotification(
+            $id, 
+            'ID Verification Rejected', 
+            "Your student ID proof was rejected. You can re-apply up to 3 times, but promo eligibility has been suspended."
+        );
+        
+        return $this->respond(['message' => 'User application rejected. Profile preserved but promo-locked.']);
     }
 }

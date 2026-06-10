@@ -1,0 +1,36 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Uploader" as U
+participant "MyUploads" as MU
+participant "UploadController" as UC
+participant "Database" as DB
+participant "FileSystem" as FS
+
+U -> MU: View My Uploads list
+MU -> UC: GET /upload/my
+UC -> DB: SELECT * WHERE uploader_id=?
+DB --> UC: list of user's resources
+UC --> MU: display resource list
+U -> MU: Type in search bar
+MU -> MU: Client-side filter by title
+
+U -> MU: Click Delete on resource
+MU -> U: Show confirmation dialog
+U -> MU: Confirm delete
+MU -> UC: DELETE /upload/delete/:id
+UC -> DB: SELECT * WHERE resource_id=? AND uploader_id=?
+note right: Ownership verification
+DB --> UC: resource record
+alt record found (owner verified)
+  UC -> DB: DELETE FROM resources (CASCADE)
+  note right: Cascades to resource_tags,\nresource_purchases,\nresource_access_logs
+  UC -> FS: unlink(file_path)
+  FS --> UC: File removed
+  UC --> MU: 200 Deleted
+  MU -> U: Remove from list
+else not found
+  UC --> MU: 404 Not found
+end
+@enduml

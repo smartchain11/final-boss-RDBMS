@@ -1,0 +1,32 @@
+@startuml
+!include 00-skin.iuml
+hide footbox
+
+actor "Uploader" as U
+participant "Dashboard" as D
+participant "UserController" as UC
+participant "Database" as DB
+
+U -> D: Navigate to Earnings tab
+D -> U: Show balance + payout accounts
+U -> D: Click Withdraw, select account
+D -> U: Enter withdrawal amount
+U -> D: Enter 6-digit payout PIN
+D -> UC: POST /user/withdrawal/request
+UC -> DB: SELECT payout_pin FROM users
+DB --> UC: hashed pin
+alt pin matches (password_verify)
+  UC -> DB: SELECT balance FROM earnings
+  DB --> UC: current balance
+  alt amount <= balance
+    UC -> DB: INSERT INTO withdrawals (status=pending)
+    UC -> DB: INSERT INTO notifications (admin)
+    UC --> D: 200 Withdrawal requested
+    D -> U: Show success + pending status
+  else insufficient balance
+    UC --> D: 400 Insufficient balance
+  end
+else pin mismatch
+  UC --> D: 403 Invalid PIN
+end
+@enduml

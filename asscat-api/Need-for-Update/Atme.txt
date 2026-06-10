@@ -1,0 +1,147 @@
+Analyze The Directories; analyze the neccesary files/ Significants all must review it.
+
+
+
+
+Add for this system:
+
+
+* Add transactions per users interact
+
+* Limit the users by open the materials 5-10
+
+* Material Uploader can earn / website owner
+
+* If materials have price user can see 15-20% contain in it
+
+* It has some catchy promo/discount to upgrade the users level applicalbe for student and add user regular choices if student register it has promotion if tertiary level
+
+
+Security Feature:
+
+limit the log in spam 3-5 times straight row
+
+
+
+
+DB STRUCTURE:
+
+
++----------------------+
+| Database             |
++----------------------+
+| asscat_oer_pro       |
+| contact_app          |
+| cute                 |
+| information_schema   |
+| inventory_app        |
+| mysql                |
+| necry_open_knowledge |
+| performance_schema   |
+| phpmyadmin           |
+| test                 |
++----------------------+
+
+
+structure of Tables:
+
+
+MariaDB [necry_open_knowledge]> describe users;
++---------------+------------------------------------+------+-----+---------------------+----------------+
+| Field         | Type                               | Null | Key | Default             | Extra          |
++---------------+------------------------------------+------+-----+---------------------+----------------+
+| user_id       | int(11)                            | NO   | PRI | NULL                | auto_increment |
+| name          | varchar(100)                       | NO   |     | NULL                |                |
+| email         | varchar(100)                       | NO   | UNI | NULL                |                |
+| password_hash | varchar(255)                       | NO   |     | NULL                |                |
+| role          | enum('admin','uploader','student') | YES  |     | student             |                |
+| created_at    | timestamp                          | NO   |     | current_timestamp() |                |
++---------------+------------------------------------+------+-----+---------------------+----------------+
+6 rows in set (0.022 sec)
+
+MariaDB [necry_open_knowledge]> describe user_details;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| user_id        | int(11)      | NO   | PRI | NULL    |       |
+| bio            | text         | YES  |     | NULL    |       |
+| profile_image  | varchar(255) | YES  |     | NULL    |       |
+| specialization | varchar(100) | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.024 sec)
+
+MariaDB [necry_open_knowledge]> describe tags;
++----------+-------------+------+-----+---------+----------------+
+| Field    | Type        | Null | Key | Default | Extra          |
++----------+-------------+------+-----+---------+----------------+
+| tag_id   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| tag_name | varchar(50) | NO   | UNI | NULL    |                |
++----------+-------------+------+-----+---------+----------------+
+2 rows in set (0.017 sec)
+
+MariaDB [necry_open_knowledge]> describe resources;
++-------------+--------------+------+-----+---------------------+----------------+
+| Field       | Type         | Null | Key | Default             | Extra          |
++-------------+--------------+------+-----+---------------------+----------------+
+| resource_id | int(11)      | NO   | PRI | NULL                | auto_increment |
+| section_id  | int(11)      | YES  | MUL | NULL                |                |
+| dept_id     | int(11)      | YES  | MUL | NULL                |                |
+| uploader_id | int(11)      | YES  |     | NULL                |                |
+| title       | varchar(200) | NO   |     | NULL                |                |
+| description | text         | YES  |     | NULL                |                |
+| file_path   | varchar(255) | NO   |     | NULL                |                |
+| file_type   | varchar(50)  | YES  |     | NULL                |                |
+| uploaded_at | timestamp    | NO   |     | current_timestamp() |                |
+| is_approved | tinyint(1)   | NO   |     | 0                   |                |
++-------------+--------------+------+-----+---------------------+----------------+
+10 rows in set (0.019 sec)
+
+MariaDB [necry_open_knowledge]> describe resource_tags;
++-------------+---------+------+-----+---------+-------+
+| Field       | Type    | Null | Key | Default | Extra |
++-------------+---------+------+-----+---------+-------+
+| resource_id | int(11) | NO   | PRI | NULL    |       |
+| tag_id      | int(11) | NO   | PRI | NULL    |       |
++-------------+---------+------+-----+---------+-------+
+2 rows in set (0.018 sec)
+
+MariaDB [necry_open_knowledge]> describe departments;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| dept_id     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| dept_name   | varchar(100) | NO   |     | NULL    |                |
+| description | text         | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.019 sec)
+
+MariaDB [necry_open_knowledge]> describe courses;
++-------------+--------------+------+-----+---------------------+----------------+
+| Field       | Type         | Null | Key | Default             | Extra          |
++-------------+--------------+------+-----+---------------------+----------------+
+| course_id   | int(11)      | NO   | PRI | NULL                | auto_increment |
+| title       | varchar(200) | NO   |     | NULL                |                |
+| description | text         | YES  |     | NULL                |                |
+| dept_id     | int(11)      | YES  | MUL | NULL                |                |
+| uploader_id | int(11)      | YES  | MUL | NULL                |                |
+| created_at  | timestamp    | NO   |     | current_timestamp() |                |
++-------------+--------------+------+-----+---------------------+----------------+
+6 rows in set (0.018 sec)
+
+MariaDB [necry_open_knowledge]> describe course_sections;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| section_id   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| course_id    | int(11)      | YES  | MUL | NULL    |                |
+| section_name | varchar(100) | NO   |     | NULL    |                |
+| sort_order   | int(11)      | YES  |     | 0       |                |
++--------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.026 sec)
+
+MariaDB [necry_open_knowledge]>
+
+
+follow the RDBMS, EDR: 1:1, 1:MANY, MANY:MANY
+
+make the code clean neat test and run debug first before its done.....

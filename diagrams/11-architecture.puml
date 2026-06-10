@@ -1,0 +1,58 @@
+@startuml
+!include 00-skin.iuml
+
+skinparam componentStyle rectangle
+skinparam componentBorderColor black
+skinparam componentBackgroundColor white
+skinparam databaseBorderColor black
+skinparam databaseBackgroundColor white
+skinparam nodeBorderColor black
+skinparam nodeBackgroundColor white
+skinparam rectangleBorderColor black
+skinparam rectangleBackgroundColor white
+skinparam arrowColor black
+
+title "Necry OER Portal - 3-Tier Architecture"
+
+node "Presentation Layer\n(Client Browser)" as PRES {
+  component "React SPA" as SPA
+  component "Axios HTTP Client" as AXIOS
+  component "Tailwind CSS" as TW
+  component "JWT Storage" as JWT
+}
+
+node "Application Layer\n(Web Server)" as APP {
+  component "CodeIgniter 4 API" as CI4
+  component "Controllers" as CTRL
+  component "Models" as MOD
+  component "AuthFilter JWT" as AUTH
+  component "EmailService\nPHPMailer" as MAIL
+  component "DeviceTracker" as DEV
+}
+
+node "Data Layer\n(Database Server)" as DATA {
+  database "MariaDB" as DB {
+    file "15 Tables" as TBL
+    file "InnoDB Engine" as ENG
+    file "Foreign Keys" as FK
+  }
+}
+
+SPA -right-> AXIOS : HTTP/JSON
+AXIOS -right-> CI4 : REST API Calls
+CI4 -right-> AUTH : JWT Verification
+AUTH -right-> CTRL : Authorized
+CTRL -right-> MOD : Business Logic
+MOD -right-> DB : SQL Queries
+DB -left-> MOD : Result Sets
+MOD -left-> CTRL : Data Objects
+CTRL -left-> AXIOS : JSON Response
+AXIOS -left-> SPA : State Update
+
+SPA -up-> JWT : Store Token
+JWT -down-> AXIOS : Attach Header
+
+CI4 -up-> MAIL : SMTP
+CI4 -up-> DEV : ip-api.com
+
+@enduml

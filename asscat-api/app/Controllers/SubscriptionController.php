@@ -1,0 +1,94 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Libraries\FeatureSchema;
+use App\Libraries\JwtAuth;
+use CodeIgniter\RESTful\ResourceController;
+
+class SubscriptionController extends ResourceController
+{
+    private function getAuthUser(): ?array
+    {
+        $header = $this->request->getHeaderLine('Authorization');
+        $decoded = JwtAuth::decodeFromHeader($header);
+        
+        if (! $decoded || empty($decoded->uid)) {
+            return null;
+        }
+
+        $userModel = new \App\Models\UserModel();
+        return $userModel->find((int) $decoded->uid);
+    }
+
+    public function upgrade()
+    {
+        FeatureSchema::ensure();
+
+        $user = $this->getAuthUser();
+        if (! $user) {
+            return $this->failUnauthorized('Authentication required.');
+        }
+
+        $tier = $this->request->getVar('tier'); // 'pro', 'pro_plus'
+        $paymentMethod = $this->request->getVar('payment_method') ?? 'card';
+
+        if (! in_array($tier, ['pro', 'pro_plus'], true)) {
+            return $this->fail('Invalid tier selection.', 400);
+        }
+
+        // Base Prices (Monthly)
+        $prices = [
+            'pro' => 499.00,
+            'pro_plus' => 899.00
+        ];
+
+        $basePrice = $prices[$tier];
+        
+        // Only apply discount if verified AND not an Admin
+        $discountPercent = 0.0;
+        $isVerified = (int)($user['verification_status'] ?? 0) === 1;
+        $isAdmin = ($user['role'] ?? '') === 'admin';
+
+        if ($isVerified && ! $isAdmin) {
+            $discountPercent = (float) ($user['promo_discount'] ?? 0);
+        }
+        
+        $finalPrice = round(max(0, $basePrice * (1 - ($discountPercent / 100))), 2);
+
+        $db = \Config\Database::connect();
+        
+        // Update User Tier
+        $userModel = new \App\Models\UserModel();
+        $subscriptionExpiresAt = date('Y-m-d H:i:s', strtotime('+30 days'));
+        
+        $userModel->update($user['user_id'], [
+            'subscription_tier' => $tier,
+            'subscription_expires_at' => $subscriptionExpiresAt
+        ]);
+
+        // Record Transaction
+        $db->table('user_transactions')->insert([
+            'user_id' => $user['user_id'],
+            'transaction_type' => 'promo_applied',
+            'payment_method' => $paymentMethod,
+            'amount' => $finalPrice,
+            'note' => "Upgraded to {$tier} monthly subscription",
+        ]);
+
+        // Send upgrade confirmation email
+        try {
+            $emailService = new \App\Libraries\EmailService();
+            $emailService->sendUpgradeConfirmation($user['email'], $user['name'], $tier, $finalPrice);
+        } catch (\Throwable $e) {
+            log_message('error', 'Failed to send upgrade email: ' . $e->getMessage());
+        }
+
+        return $this->respond([
+            'message' => "Successfully upgraded to " . strtoupper($tier),
+            'tier' => $tier,
+            'expires_at' => $subscriptionExpiresAt,
+            'paid_amount' => $finalPrice
+        ]);
+    }
+}
